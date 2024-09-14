@@ -6,13 +6,15 @@ import pandas as pd
 from io import StringIO
 import requests
 
-url = 'https://raw.githubusercontent.com/var-github/Sudoku/main/Sudoku_questions.txt'
-response = requests.get(url)
-while response.status_code != 200:
-    pass
+if "data" not in st.sesion_state:
+    url = 'https://raw.githubusercontent.com/var-github/Sudoku/main/Sudoku_questions.txt'
+    response = requests.get(url)
+    while response.status_code != 200:
+        pass
+    f = StringIO(response.text)
+    st.session_state[data] = f.readlines()
 st.header("Sudoku Solver")
-f = StringIO(response.text)
-data = f.readlines()
+data = st.session_state[data]
 n = st.number_input("The file has 46 sudoku's please enter which one to solve (1-46): ", min_value=1, max_value=46)
 if st.button("Solve"):
     empty_rows = {}
