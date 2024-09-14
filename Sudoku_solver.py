@@ -8,11 +8,10 @@ import requests
 
 url = 'https://raw.githubusercontent.com/var-github/Sudoku/main/Sudoku_questions.txt'
 response = requests.get(url)
-if response.status_code == 200:
-    st.text(str(StringIO(response.text)))
-st.stop()
+while response.status_code != 200:
+    pass
 st.header("Sudoku Solver")
-f = open("./data/Sudoku_questions.txt")
+f = StringIO(response.text)
 data = f.readlines()
 n = int(st.number_input("The file has 46 sudoku's please enter which one to solve (1-46): ", min_value=1, max_value=46))
 if st.button("Solve"):
