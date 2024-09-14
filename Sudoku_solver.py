@@ -60,10 +60,10 @@ if st.button("Solve"):
     def display(d):
         df = pd.DataFrame(d)
         df.replace("0", "", inplace=True)
-        df = df.style.apply(lambda x: ['background-color: lightgrey']*3+['']*3+['background-color: lightgrey']*3, axis=0, subset=[0, 1, 2, 6, 7, 8])
+        df = df.style.apply(lambda x: ['background-color: lightblue']*3+['']*3+['background-color: lightgrey']*3, axis=0, subset=[0, 1, 2, 6, 7, 8])
         df.apply(lambda x: ['']*3 + ['background-color: lightgrey']*3, axis=0, subset=[3, 4, 5])
         df.hide(axis=0).hide(axis=1)
-        df.set_table_styles([{'selector': '', 'props': [('border', '2px solid black')]}, {'selector': 'tr', 'props': [('height', '38px')]}, {'selector': 'td', 'props': [('width', '35px')]}])
+        df.set_table_styles([{'selector': '', 'props': [('border', '2px solid white')]}, {'selector': 'tr', 'props': [('height', '38px')]}, {'selector': 'td', 'props': [('width', '35px')]}])
         st.write(df.to_html(), unsafe_allow_html=True)
 
 
