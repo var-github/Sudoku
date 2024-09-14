@@ -12,9 +12,9 @@ if "data" not in st.session_state:
     while response.status_code != 200:
         pass
     f = StringIO(response.text)
-    st.session_state[data] = f.readlines()
+    st.session_state["data"] = f.readlines()
 st.header("Sudoku Solver")
-data = st.session_state[data]
+data = st.session_state["data"]
 n = st.number_input("The file has 46 sudoku's please enter which one to solve (1-46): ", min_value=1, max_value=46)
 if st.button("Solve"):
     empty_rows = {}
