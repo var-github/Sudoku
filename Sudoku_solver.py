@@ -5,7 +5,7 @@ import numpy
 import pandas as pd
 
 st.header("Sudoku Solver")
-f = open("Sudoku.txt")
+f = open("Sudoku_questions.txt")
 data = f.readlines()
 n = int(st.number_input("The file has 46 sudoku's please enter which one to solve (1-46): ", min_value=1, max_value=46))
 if st.button("Solve"):
