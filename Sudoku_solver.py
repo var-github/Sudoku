@@ -9,7 +9,7 @@ import requests
 url = 'https://raw.githubusercontent.com/var-github/Sudoku/main/Sudoku_questions.txt'
 response = requests.get(url)
 if response.status_code == 200:
-    st.text(StringIO(response.text))
+    st.text(str(StringIO(response.text)))
 st.stop()
 st.header("Sudoku Solver")
 f = open("./data/Sudoku_questions.txt")
