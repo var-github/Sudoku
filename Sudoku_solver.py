@@ -13,7 +13,7 @@ while response.status_code != 200:
 st.header("Sudoku Solver")
 f = StringIO(response.text)
 data = f.readlines()
-n = int(st.number_input("The file has 46 sudoku's please enter which one to solve (1-46): ", min_value=1, max_value=46))
+n = st.number_input("The file has 46 sudoku's please enter which one to solve (1-46): ", min_value=1, max_value=46)
 if st.button("Solve"):
     empty_rows = {}
     empty_columns = {}
