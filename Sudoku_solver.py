@@ -3,12 +3,9 @@ import streamlit as st
 import copy
 import numpy
 import pandas as pd
-import os
 
 st.header("Sudoku Solver")
-st.text(os.getcwd())
-st.stop()
-f = open("Sudoku_questions.txt")
+f = open("./data/Sudoku_questions.txt")
 data = f.readlines()
 n = int(st.number_input("The file has 46 sudoku's please enter which one to solve (1-46): ", min_value=1, max_value=46))
 if st.button("Solve"):
