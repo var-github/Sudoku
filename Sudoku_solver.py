@@ -6,9 +6,11 @@ import pandas as pd
 from io import StringIO
 import requests
 
-if "data" not in st.sesion_state:
+if "data" not in st.session_state:
     url = 'https://raw.githubusercontent.com/var-github/Sudoku/main/Sudoku_questions.txt'
     response = requests.get(url)
+    while response.status_code != 200:
+        pass
     f = StringIO(response.text)
     st.session_state[data] = f.readlines()
 st.header("Sudoku Solver")
