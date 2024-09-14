@@ -3,6 +3,8 @@ import streamlit as st
 import copy
 import numpy
 import pandas as pd
+from io import StringIO
+import requests
 
 url = 'https://raw.githubusercontent.com/var-github/Sudoku/main/Sudoku_questions.txt'
 response = requests.get(url)
