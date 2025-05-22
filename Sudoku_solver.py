@@ -15,7 +15,7 @@ if "data" not in st.session_state:
     st.session_state["data"] = f.readlines()
 st.header("Sudoku Solver")
 data = st.session_state["data"]
-n = st.number_input("The file has 46 sudoku's please enter which one to solve (1-46): ", min_value=1, max_value=46)
+n = st.number_input("The file has 46 sudoku's please enter which one to solve (1-50): ", min_value=1, max_value=50)
 if st.button("Solve"):
     empty_rows = {}
     empty_columns = {}
