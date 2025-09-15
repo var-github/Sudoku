@@ -99,7 +99,7 @@ st.markdown("""<style>
 
 @st.dialog("Please enter only valid numbers", on_dismiss='rerun')
 def error():
-    st.session_state["refresh"] = True if not st.session_state["refresh"] else False
+    st.session_state["refresh"] = not st.session_state["refresh"]
 
 def validate(i, j):
     try:
@@ -118,7 +118,7 @@ col2.text("Enter question or")
 if col3.button("Generate random", key="random"):
     n = random.randint(1, 50)
     st.session_state["question"] = st.session_state["data"][n * 10 - 9:n * 10]
-    st.session_state["refresh"] = True if not st.session_state["refresh"] else False
+    st.session_state["refresh"] = not st.session_state["refresh"]
     st.rerun()
 
 column1, column2 = st.columns(2)
@@ -148,6 +148,32 @@ def display(d):
                          {'selector': 'td', 'props': [('width', '35px'), ('padding', '5px'), ('padding-left', '13px'), ('padding-bottom', '4px')]}])
     column2.write(df.to_html(), unsafe_allow_html=True)
 
+
+# Function to check if sudoku is valid
+def valid_question():
+    # List containing all boxes in the sudoku
+    boxes = [list(box(x, y)) for x in range(0, 9, 3) for y in range(0, 9, 3)]
+
+    if not numpy.all([(len(set(row)) + list(row).count('0') - 1 == len(row)) for row in sudoku]):
+        column2.error("Invalid question !!")
+        column2.error("A row cannot have repeating numbers")
+        return False
+    elif not numpy.all([(len(set(row)) + list(row).count('0') - 1 == len(row)) for row in sudoku.T]):
+        column2.error("Invalid question !!")
+        column2.error("A column cannot have repeating numbers")
+        return False
+    elif not numpy.all([(len(set(box)) + list(box).count('0') - 1 == len(box)) for box in boxes]):
+        column2.error("Invalid question !!")
+        column2.error("A box cannot have repeating numbers")
+        return False
+    # We know that for unique solution we need more than 17 numbers to be present
+    elif sum([list(sudoku.flatten()).count(str(x)) for x in range(1, 10)]) < 17:
+        column2.error("Invalid question !!")
+        column2.error("Sudoku has multiple solutions. Enter valid sudoku with unique solution")
+        return False
+    return True
+
+
 st.text("")
 if st.button("Solve", key="solve"):
     try:
@@ -176,6 +202,8 @@ if st.button("Solve", key="solve"):
         def box(row_no, col_no):
             return sudoku[(row_no // 3) * 3:(row_no // 3) * 3 + 3, (col_no // 3) * 3:(col_no // 3) * 3 + 3].flatten()
 
+        if not valid_question():
+            st.stop()
 
         for i in empty_rows:
             for j in empty_rows[i]:
@@ -446,7 +474,24 @@ if st.button("Solve", key="solve"):
             if changes == 0:
                 break
 
-        col5.markdown('<p style="font-size: 25px; position: relative; left: 15px;font-weight: bold;">Solution</p>', unsafe_allow_html=True)
+        if '0' not in sudoku.flatten():
+            col5.markdown('<p style="font-size: 25px; position: relative; left: 15px;font-weight: bold;">Solution</p>', unsafe_allow_html=True)
+        else:
+            col5.markdown('<p style="font-size: 25px; position: relative; left: 15px;font-weight: bold;">Partial Solution</p>', unsafe_allow_html=True)
+            st.text("")
+            st.write("##### :red[Unable to solve using following methods]")
+            a, b, c = st.columns([1, 1, 2])
+            a.write("""
+            - Hidden Single
+            - Naked single
+            - Locked candidates""")
+            b.write("""
+            - Naked pair
+            - Hidden pair
+            - X-wing""")
+
         display(sudoku)
+
     except:
         column2.error("Invalid question")
+        column2.error("Sudoku has no solution")
