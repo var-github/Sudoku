@@ -410,7 +410,7 @@ if st.button("Solve", key="solve"):
         # What to do when sudoku not solved
         else:
             col5.markdown('<p style="font-size: 25px; position: relative; left: 15px;font-weight: bold;">Partial Solution</p>', unsafe_allow_html=True)
-            st.text("")
+            st.write("----------------------------")
             st.write("##### :red[Unable to solve using following methods]")
             a, b, c = st.columns([1, 1, 2])
             a.write("""
