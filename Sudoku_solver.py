@@ -4,103 +4,29 @@ import streamlit as st
 import copy
 import numpy
 import pandas as pd
-from io import StringIO
-import requests
 
 if "data" not in st.session_state:
-    url = 'https://raw.githubusercontent.com/var-github/Sudoku/main/Sudoku_questions.txt'
-    response = requests.get(url)
-    while response.status_code != 200:
-        pass
-    f = StringIO(response.text)
-    st.session_state["data"] = f.readlines()
-
+    with open("Sudoku_questions.txt", "r") as f:
+        st.session_state["data"] = f.readlines()
 if "question" not in st.session_state:
     st.session_state["question"] = ["0"*9]*9
 if "refresh" not in st.session_state:
     st.session_state["refresh"] = False
+if "css" not in st.session_state:
+    with open("styles.css") as f:
+        st.session_state["css"] = f.read()
 
 
-st.markdown("""<style>
-    .st-key-question [data-testid="stLayoutWrapper"]{
-        width: 300px;
-        height: 20px;
-    }
-    .st-key-question div{
-        background: none;
-    }
-    .stTextInput{
-        width:36px;
-    }
-    .stTextInput>label{
-        display:none;
-    }
-    .stTextInput>div{
-        height: 37px;
-        border: 1px solid #b3b3b6;
-        border-radius: 0;
-    }
-    [data-baseweb="base-input"] div{
-        display: none;
-    }
+# Inject CSS into the app
+st.markdown(f"<style>{st.session_state["css"]}</style>", unsafe_allow_html=True)
 
-    /*Setting border to boxes*/
-    .st-key-question [data-testid="stLayoutWrapper"]:nth-child(1) .stTextInput>div{
-        border-top: 2px solid black;
-    }
-    .st-key-question [data-testid="stLayoutWrapper"]:nth-child(9) .stTextInput>div{
-        border-bottom: 2px solid black;
-    }
-    .st-key-question .stColumn:nth-of-type(1) .stTextInput>div{
-        border-left: 2px solid black;
-    }
-    .st-key-question .stColumn:nth-of-type(9) .stTextInput>div{
-        border-right: 2px solid black;
-    }
-
-    /*Setting background to boxes*/
-    .st-key-question [data-testid="stLayoutWrapper"]:nth-child(-n+3) .stColumn:nth-child(-n+3) div{
-        background: lightgrey;
-    }
-    .st-key-question [data-testid="stLayoutWrapper"]:nth-child(-n+3) .stColumn:nth-last-child(-n+3) div{
-        background: lightgrey;
-    }
-    .st-key-question [data-testid="stLayoutWrapper"]:nth-last-child(-n+3) .stColumn:nth-child(-n+3) div{
-        background: lightgrey;
-    }
-    .st-key-question [data-testid="stLayoutWrapper"]:nth-last-child(-n+3) .stColumn:nth-last-child(-n+3) div{
-        background: lightgrey;
-    }
-    .st-key-question [data-testid="stLayoutWrapper"]:nth-child(-n+6):nth-child(n+4) .stColumn:nth-child(-n+6):nth-child(n+4) div{
-        background: lightgrey;
-    }
-    
-    .st-key-random{
-        position: relative;
-        top: -5px;
-    }
-    .st-key-random button{
-        background: lightgreen;
-    }
-    .st-key-random button:hover{
-        background: #44a832;
-    }
-    .st-key-solve button{
-        background: #327da8;
-        width: 322px;
-        position: relative;
-        left: -1px;
-    }
-    .st-key-solve button:hover{
-        background: lightblue;
-    }
-</style>""", unsafe_allow_html=True)
-
-
+# Dialog box to display if invalid number entered
 @st.dialog("Please enter only valid numbers", on_dismiss='rerun')
 def error():
     st.session_state["refresh"] = not st.session_state["refresh"]
 
+
+# Check if in valid number entered, if valid store new number, else raise error
 def validate(i, j):
     try:
         val = eval(f'st.session_state.n{i}')
@@ -112,18 +38,7 @@ def validate(i, j):
         error()
 
 
-st.header("Sudoku solver")
-col1, col2, col3, col4, col5, col6 = st.columns([0.1, 1.2, 2, 1, 1.1, 1])
-col2.text("Enter question or")
-if col3.button("Generate random", key="random"):
-    n = random.randint(1, 50)
-    st.session_state["question"] = st.session_state["data"][n * 10 - 9:n * 10]
-    st.session_state["refresh"] = not st.session_state["refresh"]
-    st.rerun()
-
-column1, column2 = st.columns(2)
-question = column1.container(key="question")
-
+# Display sudoku box to take input (if random question generated, use variable - 'default' to show these numbers)
 def take_input(default):
     i = 0
     if st.session_state["refresh"]:
@@ -133,8 +48,8 @@ def take_input(default):
             col.text_input(" ", key=f'n{i}', value=("" if default[j][i%9] == "0" else default[j][i%9]), max_chars=1, on_change=lambda x=i, y=j: validate(x, y), autocomplete="off")
             i += 1
 
-take_input(st.session_state["question"])
 
+# Function to display final sudoku
 def display(d):
     df = pd.DataFrame(d)
     df.replace("0", "", inplace=True)
@@ -173,6 +88,21 @@ def valid_question():
         return False
     return True
 
+
+# Main code
+st.header("Sudoku solver")
+col1, col2, col3, col4, col5, col6 = st.columns([0.1, 1.2, 2, 1, 1.1, 1])
+col2.text("Enter question or")
+if col3.button("Generate random", key="random"):
+    n = random.randint(1, 50)
+    st.session_state["question"] = st.session_state["data"][n * 10 - 9:n * 10]
+    st.session_state["refresh"] = not st.session_state["refresh"]
+    st.rerun()
+
+column1, column2 = st.columns(2)
+question = column1.container(key="question")
+
+take_input(st.session_state["question"])
 
 st.text("")
 if st.button("Solve", key="solve"):
@@ -474,8 +404,10 @@ if st.button("Solve", key="solve"):
             if changes == 0:
                 break
 
+        # Display output if solved
         if '0' not in sudoku.flatten():
             col5.markdown('<p style="font-size: 25px; position: relative; left: 15px;font-weight: bold;">Solution</p>', unsafe_allow_html=True)
+        # What to do when sudoku not solved
         else:
             col5.markdown('<p style="font-size: 25px; position: relative; left: 15px;font-weight: bold;">Partial Solution</p>', unsafe_allow_html=True)
             st.text("")
