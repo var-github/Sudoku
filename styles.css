@@ -1,0 +1,73 @@
+.st-key-question [data-testid="stLayoutWrapper"]{
+    width: 300px;
+    height: 20px;
+}
+.st-key-question div{
+    background: none;
+}
+.stTextInput{
+    width:36px;
+}
+.stTextInput>label{
+    display:none;
+}
+.stTextInput>div{
+    height: 37px;
+    border: 1px solid #b3b3b6;
+    border-radius: 0;
+}
+[data-baseweb="base-input"] div{
+    display: none;
+}
+
+/*Setting border to boxes*/
+.st-key-question [data-testid="stLayoutWrapper"]:nth-child(1) .stTextInput>div{
+    border-top: 2px solid black;
+}
+.st-key-question [data-testid="stLayoutWrapper"]:nth-child(9) .stTextInput>div{
+    border-bottom: 2px solid black;
+}
+.st-key-question .stColumn:nth-of-type(1) .stTextInput>div{
+    border-left: 2px solid black;
+}
+.st-key-question .stColumn:nth-of-type(9) .stTextInput>div{
+    border-right: 2px solid black;
+}
+
+/*Setting background to boxes*/
+.st-key-question [data-testid="stLayoutWrapper"]:nth-child(-n+3) .stColumn:nth-child(-n+3) div{
+    background: lightgrey;
+}
+.st-key-question [data-testid="stLayoutWrapper"]:nth-child(-n+3) .stColumn:nth-last-child(-n+3) div{
+    background: lightgrey;
+}
+.st-key-question [data-testid="stLayoutWrapper"]:nth-last-child(-n+3) .stColumn:nth-child(-n+3) div{
+    background: lightgrey;
+}
+.st-key-question [data-testid="stLayoutWrapper"]:nth-last-child(-n+3) .stColumn:nth-last-child(-n+3) div{
+    background: lightgrey;
+}
+.st-key-question [data-testid="stLayoutWrapper"]:nth-child(-n+6):nth-child(n+4) .stColumn:nth-child(-n+6):nth-child(n+4) div{
+    background: lightgrey;
+}
+
+/*Random button and solve button styling*/
+.st-key-random{
+    position: relative;
+    top: -5px;
+}
+.st-key-random button{
+    background: lightgreen;
+}
+.st-key-random button:hover{
+    background: #44a832;
+}
+.st-key-solve button{
+    background: #327da8;
+    width: 322px;
+    position: relative;
+    left: -1px;
+}
+.st-key-solve button:hover{
+    background: lightblue;
+}
