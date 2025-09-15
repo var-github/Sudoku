@@ -1,10 +1,10 @@
-# Program to solve sudoku's
 import random
 import streamlit as st
 import copy
 import numpy
 import pandas as pd
 
+# Setting variables initially
 if "data" not in st.session_state:
     with open("Sudoku_questions.txt", "r") as f:
         st.session_state["data"] = f.readlines()
@@ -91,7 +91,7 @@ def valid_question():
 
 # Main code
 st.header("Sudoku solver")
-col1, col2, col3, col4, col5, col6 = st.columns([0.1, 1.2, 2, 1, 1.1, 1])
+col1, col2, col3, col4, col5, col6 = st.columns([0.1, 1.2, 2, 0.7, 1.7, 0.7])
 col2.text("Enter question or")
 if col3.button("Generate random", key="random"):
     n = random.randint(1, 50)
@@ -406,7 +406,7 @@ if st.button("Solve", key="solve"):
 
         # Display output if solved
         if '0' not in sudoku.flatten():
-            col5.markdown('<p style="font-size: 25px; position: relative; left: 15px;font-weight: bold;">Solution</p>', unsafe_allow_html=True)
+            col5.markdown('<p style="font-size: 25px; position: relative; left: 45px;font-weight: bold;">Solution</p>', unsafe_allow_html=True)
         # What to do when sudoku not solved
         else:
             col5.markdown('<p style="font-size: 25px; position: relative; left: 15px;font-weight: bold;">Partial Solution</p>', unsafe_allow_html=True)
